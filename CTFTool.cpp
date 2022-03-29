@@ -4,7 +4,7 @@ int main(int argc, char const *argv[])
 {
     using namespace ctf;
 
-    FlagFormat format("(ctf\\{.*\\})");
+    FlagFormat format("ctf{.*}");
 
     std::shared_ptr<WorkerPool> pool = WorkerPool::get_instance(format);
 

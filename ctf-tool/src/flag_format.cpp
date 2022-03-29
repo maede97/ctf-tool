@@ -1,12 +1,32 @@
 #include <ctf-tool/flag_format.h>
-#include <iostream>
+#include <sstream>
 
 namespace ctf
 {
 
     FlagFormat::FlagFormat(const std::string &format)
     {
-        m_regex = std::regex(format);
+        std::stringstream regex_builder;
+        regex_builder << "("; // group matching
+
+        for (char c : format)
+        {
+            if (c == '{')
+            {
+                regex_builder << "\\{";
+            }
+            else if (c == '}')
+            {
+                regex_builder << "\\}";
+            }
+            else
+            {
+                regex_builder << c;
+            }
+        }
+        regex_builder << ")"; // group matching
+
+        m_regex = std::regex(regex_builder.str());
     }
 
     bool FlagFormat::matches_format(const Output &op_output) const
