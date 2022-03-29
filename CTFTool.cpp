@@ -10,7 +10,7 @@ int main(int argc, char const *argv[])
 
     Input my_input = Input("WTNSbWUzaDRlSGg5Q2c9PQo="); // double base64 encoded flag.
 
-    pool->solve(my_input, 18);
+    pool->solve(my_input, 4);
 
     return 0;
 }

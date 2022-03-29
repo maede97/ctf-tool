@@ -56,17 +56,19 @@ namespace ctf
                         operation->setAssigned();
                         // assign the job to the worker
                         m_assigned_jobs[i] = operation;
-                        std::cout << "[" << i << "] Worker got job: \"" << AllOperations_to_string(operation->type()) << "\"" << std::endl;
+                        // std::cout << "[" << i << "] Worker got job: \"" << AllOperations_to_string(operation->type()) << "\"" << std::endl;
                     }
                 }
 
                 if (m_assigned_jobs[i] == m_completed_jobs[i] && m_completed_jobs[i] != nullptr)
                 {
                     // the job is complete
-                    std::cout << "[" << i << "] Worker completed job \"" << AllOperations_to_string(m_completed_jobs[i]->type()) << "\"" << std::endl;
+                    // std::cout << "[" << i << "] Worker completed job \"" << AllOperations_to_string(m_completed_jobs[i]->type()) << "\"" << std::endl;
                     m_assigned_jobs[i] = nullptr;
                     mark_as_complete(m_completed_jobs[i]);
                     m_completed_jobs[i] = nullptr;
+
+                    if(is_stopped) return;
                 }
             }
         }
@@ -175,7 +177,7 @@ namespace ctf
         std::lock_guard<std::mutex> lock(m_jobs_mutex);
         m_jobs.push_back(operation);
 
-        std::cout << "[+] Add job \"" << AllOperations_to_string(operation->type()) << "\"" << std::endl;
+        // std::cout << "[+] Add job \"" << AllOperations_to_string(operation->type()) << "\"" << std::endl;
     }
 
     void WorkerPool::mark_as_complete(std::shared_ptr<Operation> operation)
@@ -200,7 +202,7 @@ namespace ctf
         else
         {
             // invalid
-            std::cout << "[-] Completed job \"" << AllOperations_to_string(operation->type()) << "\" (invalid)" << std::endl;
+            // std::cout << "[-] Completed job \"" << AllOperations_to_string(operation->type()) << "\" (invalid)" << std::endl;
         }
     }
 
