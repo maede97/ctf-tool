@@ -5,12 +5,16 @@
 namespace ctf
 {
 
-#define ALL_OPS(func)      \
-    func(Base64Encode)     \
-        func(Base64Decode) \
-            func(PassThrough)
-
+// clang-format off
+#define ALL_OPS(func) \
+func(Base64Encode)    \
+func(Base64Decode)    \
+func(PassThrough)     \
+func(FromHex)         \
+func(ToHex)
 #define CREATE_ENUM(ops) Op_##ops,
+
+    // clang-format on
 
     enum class AllOperations
     {
