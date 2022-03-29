@@ -7,7 +7,7 @@ namespace ctf
 {
 #define CREATE_OP_SWITCH(op)     \
     case AllOperations::Op_##op: \
-        return std::make_shared<OpCls_##op>(input);
+        return std::make_shared<OpCls_##op>(input, m_key);
 
     std::shared_ptr<WorkerPool> WorkerPool::get_instance(const FlagFormat &format)
     {
@@ -21,6 +21,11 @@ namespace ctf
     WorkerPool::~WorkerPool()
     {
         stop();
+    }
+
+    void WorkerPool::set_key(const Key &key)
+    {
+        m_key = key;
     }
 
     void WorkerPool::solve(const Input &input, int num_workers)
@@ -68,7 +73,8 @@ namespace ctf
                     mark_as_complete(m_completed_jobs[i]);
                     m_completed_jobs[i] = nullptr;
 
-                    if(is_stopped) return;
+                    if (is_stopped)
+                        return;
                 }
             }
         }
@@ -213,7 +219,8 @@ namespace ctf
         if (is_stopped)
             return;
 
-        for(auto& job : m_jobs) {
+        for (auto &job : m_jobs)
+        {
             job->setCompleted();
         }
 
@@ -229,7 +236,9 @@ namespace ctf
         for (auto &worker : m_workers)
         {
             worker->should_stop = true;
-            while(!worker->has_stopped){}
+            while (!worker->has_stopped)
+            {
+            }
         }
     }
 }

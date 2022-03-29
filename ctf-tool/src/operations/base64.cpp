@@ -3,7 +3,7 @@
 
 namespace ctf
 {
-    OpCls_Base64Encode::OpCls_Base64Encode(const Input &input) : Operation(AllOperations::Op_Base64Encode, input)
+    OpCls_Base64Encode::OpCls_Base64Encode(const Input &input, const Key& key) : Operation(AllOperations::Op_Base64Encode, input, key)
     {
     }
 
@@ -38,7 +38,7 @@ namespace ctf
         return prev_type == AllOperations::Op_Base64Decode;
     }
 
-    OpCls_Base64Decode::OpCls_Base64Decode(const Input &input) : Operation(AllOperations::Op_Base64Decode, input)
+    OpCls_Base64Decode::OpCls_Base64Decode(const Input &input, const Key& key) : Operation(AllOperations::Op_Base64Decode, input, key)
     {
     }
 

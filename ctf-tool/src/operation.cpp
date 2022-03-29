@@ -10,7 +10,7 @@ namespace ctf
         return Op_Names[static_cast<int>(op)];
     }
 
-    Operation::Operation(AllOperations type, const Input &input) : m_type(type), m_input(input) {}
+    Operation::Operation(AllOperations type, const Input &input, const Key& key) : m_type(type), m_input(input), m_key(key) {}
 
     OperationStatus Operation::status() const
     {

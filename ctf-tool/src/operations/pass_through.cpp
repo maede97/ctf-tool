@@ -2,7 +2,7 @@
 
 namespace ctf
 {
-    OpCls_PassThrough::OpCls_PassThrough(const Input &input) : Operation(AllOperations::Op_PassThrough, input)
+    OpCls_PassThrough::OpCls_PassThrough(const Input &input, const Key &key) : Operation(AllOperations::Op_PassThrough, input, key)
     {
     }
 

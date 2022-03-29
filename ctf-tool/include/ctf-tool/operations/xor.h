@@ -4,11 +4,11 @@
 
 namespace ctf
 {
-    class OpCls_PassThrough : public Operation
+    class OpCls_XOR : public Operation
     {
     public:
-        OpCls_PassThrough(const Input &input, const Key& key = Key());
-        virtual ~OpCls_PassThrough() {}
+        OpCls_XOR(const Input &input, const Key& key = Key());
+        virtual ~OpCls_XOR() {}
 
         virtual void run() override;
 

@@ -4,8 +4,8 @@
 
 namespace ctf
 {
-    OpCls_FromHex::OpCls_FromHex(const Input &input)
-        : Operation(AllOperations::Op_FromHex, input)
+    OpCls_FromHex::OpCls_FromHex(const Input &input, const Key& key)
+        : Operation(AllOperations::Op_FromHex, input, key)
     {
     }
 
@@ -25,15 +25,14 @@ namespace ctf
             else
             {
                 // found wrong hex character, aborting
-                m_output = Output("", false);
                 return;
             }
         }
         m_output = Output(ss.str(), true);
     }
 
-    OpCls_ToHex::OpCls_ToHex(const Input &input)
-        : Operation(AllOperations::Op_ToHex, input)
+    OpCls_ToHex::OpCls_ToHex(const Input &input, const Key& key)
+        : Operation(AllOperations::Op_ToHex, input, key)
     {
     }
 

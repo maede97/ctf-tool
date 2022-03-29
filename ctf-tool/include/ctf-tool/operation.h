@@ -1,6 +1,7 @@
 #pragma once
 #include <ctf-tool/input.h>
 #include <ctf-tool/output.h>
+#include <ctf-tool/key.h>
 
 namespace ctf
 {
@@ -11,7 +12,9 @@ func(Base64Encode)    \
 func(Base64Decode)    \
 func(PassThrough)     \
 func(FromHex)         \
-func(ToHex)
+func(ToHex)           \
+func(XOR)
+
 #define CREATE_ENUM(ops) Op_##ops,
 
     // clang-format on
@@ -37,7 +40,7 @@ func(ToHex)
     class Operation
     {
     public:
-        Operation(AllOperations type, const Input &input);
+        Operation(AllOperations type, const Input &input, const Key & = Key());
         virtual ~Operation() = default;
         virtual void run() = 0;
 
@@ -53,6 +56,7 @@ func(ToHex)
 
     protected:
         Input m_input;
+        Key m_key;
         Output m_output;
         OperationStatus m_status = OperationStatus::NotStarted;
 

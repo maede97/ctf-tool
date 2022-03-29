@@ -3,6 +3,7 @@
 #include <ctf-tool/operation.h>
 #include <ctf-tool/worker.h>
 #include <ctf-tool/flag_format.h>
+#include <ctf-tool/key.h>
 
 #include <memory>
 #include <vector>
@@ -16,6 +17,9 @@ namespace ctf
 
     public:
         static std::shared_ptr<WorkerPool> get_instance(const FlagFormat &format);
+
+        void set_key(const Key& key);
+
         void solve(const Input &input, int num_workers);
 
         ~WorkerPool();
@@ -51,6 +55,7 @@ namespace ctf
         mutable std::mutex m_jobs_mutex;
 
         const FlagFormat &m_format;
+        Key m_key;
         bool is_stopped = false;
     };
 }

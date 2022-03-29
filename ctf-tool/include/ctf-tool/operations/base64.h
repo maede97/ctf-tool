@@ -7,7 +7,7 @@ namespace ctf
     class OpCls_Base64Encode : public Operation
     {
     public:
-        OpCls_Base64Encode(const Input &input);
+        OpCls_Base64Encode(const Input &input, const Key& key = Key());
         virtual ~OpCls_Base64Encode() {}
 
         virtual void run() override;
@@ -17,7 +17,7 @@ namespace ctf
     class OpCls_Base64Decode : public Operation
     {
     public:
-        OpCls_Base64Decode(const Input &input);
+        OpCls_Base64Decode(const Input &input, const Key& key = Key());
         virtual ~OpCls_Base64Decode() {}
 
         virtual void run() override;
