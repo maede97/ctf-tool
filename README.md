@@ -2,7 +2,7 @@
 A C++ tool that automates CTF flag finding.
 
 ## Configuration
-The tool reads a file called `config.ini` in the directory one above the binary.
+The tool reads a file called `ctf-tool.ini` in the directory one above the binary.
 
 Example contents:
 ```
