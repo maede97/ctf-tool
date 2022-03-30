@@ -191,12 +191,12 @@ void WorkerPool::mark_as_complete(std::shared_ptr<Operation> operation) {
                 current_op = current_op->getPreviousOperation();
             }
             std::reverse(backtrace.begin(), backtrace.end());
-            Terminal::print_pool_message("[+] Backtrace:", Color::Blue);
+            Terminal::print_log_message("[+] Backtrace:", Color::Blue);
             std::string backtrace_str = "";
             for (auto &op : backtrace) {
                 backtrace_str += std::string(" --> ") + AllOperations_to_string(op->type());
             }
-            Terminal::print_pool_message(backtrace_str, Color::Blue);
+            Terminal::print_log_message(backtrace_str, Color::Blue);
 
             stop();
         } else {
