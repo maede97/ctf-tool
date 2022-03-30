@@ -35,3 +35,6 @@
 .vscode
 build
 build*
+
+# Config files
+*.ini

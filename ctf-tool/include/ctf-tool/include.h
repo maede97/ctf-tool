@@ -6,3 +6,4 @@
 #include <ctf-tool/operations/operations.h>
 #include <ctf-tool/worker.h>
 #include <ctf-tool/workerpool.h>
+#include <ctf-tool/config.h>

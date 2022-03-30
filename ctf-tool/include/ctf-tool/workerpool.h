@@ -4,6 +4,7 @@
 #include <ctf-tool/key.h>
 #include <ctf-tool/operation.h>
 #include <ctf-tool/worker.h>
+#include <ctf-tool/config.h>
 
 #include <memory>
 #include <mutex>
@@ -13,16 +14,13 @@
 namespace ctf {
 class WorkerPool : public std::enable_shared_from_this<WorkerPool> {
 public:
-    static std::shared_ptr<WorkerPool> get_instance(const FlagFormat &format);
-
-    void set_key(const Key &key);
-
-    void solve(const Input &input, int num_workers);
+    static std::shared_ptr<WorkerPool> get_instance(const Config &config);
+    void solve();
 
     ~WorkerPool();
 
 private:
-    WorkerPool(const FlagFormat &format);
+    WorkerPool(const Config& config);
 
     void add_job(std::shared_ptr<Operation> operation);
 
@@ -51,8 +49,7 @@ private:
     std::vector<std::shared_ptr<Worker>> m_workers;
     mutable std::mutex m_jobs_mutex;
 
-    const FlagFormat &m_format;
-    Key m_key;
+    const Config &m_config;
     bool is_stopped = false;
 };
 }  // namespace ctf

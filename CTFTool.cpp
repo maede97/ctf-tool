@@ -3,14 +3,12 @@
 int main(int argc, char const *argv[]) {
     using namespace ctf;
 
-    FlagFormat format("ctf{.*}");
+    Config config;
+    config.read_config("../ctf-tool.ini");
 
-    std::shared_ptr<WorkerPool> pool = WorkerPool::get_instance(format);
+    std::shared_ptr<WorkerPool> pool = WorkerPool::get_instance(config);
 
-    Input my_input = Input("131515080f170a1c0d");  // FromHex --> XOR (password) --> ctf{xxxx}
-
-    pool->set_key(Key("password"));
-    pool->solve(my_input, 4);
+    pool->solve();
 
     return 0;
 }

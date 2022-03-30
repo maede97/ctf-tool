@@ -9,6 +9,7 @@ namespace ctf {
 
 class FlagFormat {
 public:
+    FlagFormat() = default;
     FlagFormat(const std::string &format);
 
     bool matches_format(const Output &op_output) const;

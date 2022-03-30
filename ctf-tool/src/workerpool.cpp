@@ -7,31 +7,27 @@
 namespace ctf {
 #define CREATE_OP_SWITCH(op)     \
     case AllOperations::Op_##op: \
-        return std::make_shared<OpCls_##op>(input, m_key);
+        return std::make_shared<OpCls_##op>(input, m_config.get_key());
 
-std::shared_ptr<WorkerPool> WorkerPool::get_instance(const FlagFormat &format) {
-    return std::shared_ptr<WorkerPool>(new WorkerPool(format));
+std::shared_ptr<WorkerPool> WorkerPool::get_instance(const Config &config) {
+    return std::shared_ptr<WorkerPool>(new WorkerPool(config));
 }
 
-WorkerPool::WorkerPool(const FlagFormat &format) : m_format(format) {}
+WorkerPool::WorkerPool(const Config &config) : m_config(config) {}
 
 WorkerPool::~WorkerPool() {
     stop();
 }
 
-void WorkerPool::set_key(const Key &key) {
-    m_key = key;
-}
-
-void WorkerPool::solve(const Input &input, int num_workers) {
-    for (int i = 0; i < num_workers; i++) {
+void WorkerPool::solve() {
+    for (int i = 0; i < m_config.get_num_workers(); i++) {
         m_workers.push_back(std::make_shared<Worker>(i, shared_from_this()));
     }
-    m_completed_jobs.resize(num_workers, nullptr);  // each worker has a spot
-    m_assigned_jobs.resize(num_workers, nullptr);
+    m_completed_jobs.resize(m_config.get_num_workers(), nullptr);  // each worker has a spot
+    m_assigned_jobs.resize(m_config.get_num_workers(), nullptr);
 
     // first: add all operations to the queue
-    add_operations_to_queue(nullptr, input);
+    add_operations_to_queue(nullptr, m_config.get_input());
 
     // second: create all threads
     for (auto &worker : m_workers) {
@@ -42,7 +38,7 @@ void WorkerPool::solve(const Input &input, int num_workers) {
 
     while (has_open_work()) {
         // check a thread for "open-to-work"
-        for (int i = 0; i < num_workers; i++) {
+        for (int i = 0; i < m_config.get_num_workers(); i++) {
             if (m_assigned_jobs[i] == nullptr) {
                 auto operation = get_next_job();
                 if (operation) {
@@ -153,8 +149,8 @@ void WorkerPool::mark_as_complete(std::shared_ptr<Operation> operation) {
     const auto &output = operation->getOutput();
 
     if (output.is_valid()) {
-        if (m_format.matches_format(output)) {
-            std::cout << "[!] Found valid flag: " << m_format.match(output) << std::endl;
+        if (m_config.get_format().matches_format(output)) {
+            std::cout << "[!] Found valid flag: " << m_config.get_format().match(output) << std::endl;
 
             stop();
         } else {

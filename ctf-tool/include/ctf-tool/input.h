@@ -5,6 +5,7 @@
 namespace ctf {
 class Input {
 public:
+    Input() = default;
     Input(const std::string &input);
 
     std::string get_input() const;
