@@ -4,3 +4,4 @@
 #include <ctf-tool/operations/hex.h>
 #include <ctf-tool/operations/pass_through.h>
 #include <ctf-tool/operations/xor.h>
+#include <ctf-tool/operations/rot13.h>

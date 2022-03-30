@@ -14,7 +14,8 @@ func(Base64Decode)    \
 func(PassThrough)     \
 func(FromHex)         \
 func(ToHex)           \
-func(XOR)
+func(XOR)             \
+func(Rot13)
 
 #define CREATE_ENUM(ops) Op_##ops,
 
