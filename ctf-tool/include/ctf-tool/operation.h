@@ -1,10 +1,9 @@
 #pragma once
 #include <ctf-tool/input.h>
-#include <ctf-tool/output.h>
 #include <ctf-tool/key.h>
+#include <ctf-tool/output.h>
 
-namespace ctf
-{
+namespace ctf {
 
 // clang-format off
 #define ALL_OPS(func) \
@@ -17,49 +16,39 @@ func(XOR)
 
 #define CREATE_ENUM(ops) Op_##ops,
 
-    // clang-format on
+// clang-format on
 
-    enum class AllOperations
-    {
-        ALL_OPS(CREATE_ENUM)
-            Op_Count
-    };
+enum class AllOperations { ALL_OPS(CREATE_ENUM) Op_Count };
 
-    const char *AllOperations_to_string(AllOperations op);
+const char *AllOperations_to_string(AllOperations op);
 
-    enum class OperationStatus
-    {
-        NotStarted,
-        Running,
-        Finished
-    };
+enum class OperationStatus { NotStarted, Running, Finished };
 
-    /**
+/**
      * @brief The Operation class is the base class for all operations.
      */
-    class Operation
-    {
-    public:
-        Operation(AllOperations type, const Input &input, const Key & = Key());
-        virtual ~Operation() = default;
-        virtual void run() = 0;
+class Operation {
+public:
+    Operation(AllOperations type, const Input &input, const Key & = Key());
+    virtual ~Operation() = default;
+    virtual void run() = 0;
 
-        virtual bool disallow_after(AllOperations type_prev) const;
+    virtual bool disallow_after(AllOperations type_prev) const;
 
-        OperationStatus status() const;
-        void setAssigned();
-        void setCompleted();
+    OperationStatus status() const;
+    void setAssigned();
+    void setCompleted();
 
-        AllOperations type() const;
+    AllOperations type() const;
 
-        const Output &getOutput() const;
+    const Output &getOutput() const;
 
-    protected:
-        Input m_input;
-        Key m_key;
-        Output m_output;
-        OperationStatus m_status = OperationStatus::NotStarted;
+protected:
+    Input m_input;
+    Key m_key;
+    Output m_output;
+    OperationStatus m_status = OperationStatus::NotStarted;
 
-        AllOperations m_type;
-    };
-}
+    AllOperations m_type;
+};
+}  // namespace ctf

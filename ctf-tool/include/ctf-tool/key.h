@@ -2,17 +2,15 @@
 
 #include <string>
 
-namespace ctf
-{
-    class Key
-    {
-    public:
-        Key() = default;
-        Key(const std::string &key);
+namespace ctf {
+class Key {
+public:
+    Key() = default;
+    Key(const std::string &key);
 
-        std::string get_key() const;
+    std::string get_key() const;
 
-    private:
-        std::string m_key;
-    };
-}
+private:
+    std::string m_key;
+};
+}  // namespace ctf

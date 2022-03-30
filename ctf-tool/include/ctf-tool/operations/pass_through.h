@@ -2,16 +2,14 @@
 
 #include <ctf-tool/operation.h>
 
-namespace ctf
-{
-    class OpCls_PassThrough : public Operation
-    {
-    public:
-        OpCls_PassThrough(const Input &input, const Key& key = Key());
-        virtual ~OpCls_PassThrough() {}
+namespace ctf {
+class OpCls_PassThrough : public Operation {
+public:
+    OpCls_PassThrough(const Input& input, const Key& key = Key());
+    virtual ~OpCls_PassThrough() {}
 
-        virtual void run() override;
+    virtual void run() override;
 
-        bool disallow_after(AllOperations type_prev) const override;
-    };
-}
+    bool disallow_after(AllOperations type_prev) const override;
+};
+}  // namespace ctf

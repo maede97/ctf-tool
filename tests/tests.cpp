@@ -1,8 +1,8 @@
 #include <ctf-tool/operations/operations.h>
+
 #include <iostream>
 
-void test_xor()
-{
+void test_xor() {
     using namespace ctf;
     // input: 131515080f170a1c0d --> FromHex --> XOR (password) --> ctf{xxxx}
     // FromHex
@@ -15,8 +15,7 @@ void test_xor()
     std::cout << "[Test] XOR got " << xor_op.getOutput().get_output() << std::endl;
 }
 
-int main(int argc, char const *argv[])
-{
+int main(int argc, char const *argv[]) {
     test_xor();
     return 0;
 }
