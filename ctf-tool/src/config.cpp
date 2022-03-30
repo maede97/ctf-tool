@@ -1,4 +1,5 @@
 #include <ctf-tool/config.h>
+#include <ctf-tool/terminal.h>
 
 #include <fstream>
 
@@ -32,6 +33,8 @@ void Config::read_config(const std::string& config_file) {
             m_num_workers = std::stoi(line.substr(line.find(":") + 2));
         }
     }
+
+    Terminal::print_log_message("[!] Read config file: " + config_file);
 }
 
 void Config::create_config(const std::string& config_file) {
@@ -40,6 +43,8 @@ void Config::create_config(const std::string& config_file) {
     file << "format: ctf{xxxx}\n";
     file << "input: 131515080f170a1c0d\n";
     file << "num_workers: 4\n";
+
+    Terminal::print_log_message("[!] Created config file: " + config_file);
 }
 
 void Config::set_key(const Key& key) {

@@ -4,7 +4,7 @@
 
 namespace ctf {
 
-FlagFormat::FlagFormat(const std::string &format) {
+FlagFormat::FlagFormat(const std::string &format) : m_format(format) {
     std::stringstream regex_builder;
     regex_builder << "(";  // group matching
 
@@ -35,6 +35,10 @@ std::string FlagFormat::match(const Output &output) const {
     } else {
         return "<Nothing extracted>";
     }
+}
+
+std::string FlagFormat::get_format() const {
+    return m_format;
 }
 
 }  // namespace ctf

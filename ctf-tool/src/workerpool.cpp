@@ -1,8 +1,8 @@
 #include <ctf-tool/operations/operations.h>
+#include <ctf-tool/terminal.h>
 #include <ctf-tool/workerpool.h>
 
 #include <functional>
-#include <iostream>
 
 namespace ctf {
 #define CREATE_OP_SWITCH(op)     \
@@ -36,6 +36,12 @@ void WorkerPool::solve() {
         thread.detach();
     }
 
+    Terminal::print_log_message("[!] Booted up " + std::to_string(m_config.get_num_workers()) + " workers");
+    Terminal::print_log_message("[!] Flag Format: \"" + m_config.get_format().get_format() + "\"");
+    Terminal::print_log_message("[!] Key: \"" + m_config.get_key().get_key() + "\"");
+    Terminal::print_log_message("[!] Input: \"" + m_config.get_input().get_input() + "\"");
+
+    int loop_count = 0;
     while (has_open_work()) {
         // check a thread for "open-to-work"
         for (int i = 0; i < m_config.get_num_workers(); i++) {
@@ -45,13 +51,14 @@ void WorkerPool::solve() {
                     operation->setAssigned();
                     // assign the job to the worker
                     m_assigned_jobs[i] = operation;
-                    // std::cout << "[" << i << "] Worker got job: \"" << AllOperations_to_string(operation->type()) << "\"" << std::endl;
+                    Terminal::print_worker_message("[" + std::to_string(i) + "] Worker got job: \"" + AllOperations_to_string(operation->type()) + "\"");
                 }
             }
 
             if (m_assigned_jobs[i] == m_completed_jobs[i] && m_completed_jobs[i] != nullptr) {
                 // the job is complete
-                // std::cout << "[" << i << "] Worker completed job \"" << AllOperations_to_string(m_completed_jobs[i]->type()) << "\"" << std::endl;
+                Terminal::print_worker_message("[" + std::to_string(i) + "] Worker completed job: \"" + AllOperations_to_string(m_completed_jobs[i]->type()) +
+                                               "\"");
                 m_assigned_jobs[i] = nullptr;
                 mark_as_complete(m_completed_jobs[i]);
                 m_completed_jobs[i] = nullptr;
@@ -59,6 +66,30 @@ void WorkerPool::solve() {
                 if (is_stopped)
                     return;
             }
+        }
+
+        if (loop_count++ % 100 == 0) {
+            // count the number of completed jobs
+            int num_completed = 0;
+            int num_running = 0;
+            int num_not_started = 0;
+            for (auto &job : m_jobs)
+                switch (job->status()) {
+                    case OperationStatus::NotStarted:
+                        num_not_started++;
+                        break;
+                    case OperationStatus::Running:
+                        num_running++;
+                        break;
+                    case OperationStatus::Finished:
+                        num_completed++;
+                        break;
+                }
+
+            Terminal::print_pool_message("[!] Has a total of " + std::to_string(m_jobs.size()) + " jobs in the queue");
+            Terminal::print_pool_message("[!] " + std::to_string(num_completed) + " completed; " + std::to_string(num_running) + " running; " +
+                                         std::to_string(num_not_started) + " not started");
+            Terminal::print_all();  // print all the logs
         }
     }
 
@@ -140,7 +171,7 @@ void WorkerPool::add_job(std::shared_ptr<Operation> operation) {
     std::lock_guard<std::mutex> lock(m_jobs_mutex);
     m_jobs.push_back(operation);
 
-    // std::cout << "[+] Add job \"" << AllOperations_to_string(operation->type()) << "\"" << std::endl;
+    Terminal::print_pool_message(std::string("[+] Add job: \"") + AllOperations_to_string(operation->type()) + "\"");
 }
 
 void WorkerPool::mark_as_complete(std::shared_ptr<Operation> operation) {
@@ -150,7 +181,7 @@ void WorkerPool::mark_as_complete(std::shared_ptr<Operation> operation) {
 
     if (output.is_valid()) {
         if (m_config.get_format().matches_format(output)) {
-            std::cout << "[!] Found valid flag: " << m_config.get_format().match(output) << std::endl;
+            Terminal::print_log_message("[+] Found valid flag: \"" + m_config.get_format().match(output) + "\"", Color::Green);
 
             stop();
         } else {
@@ -158,7 +189,7 @@ void WorkerPool::mark_as_complete(std::shared_ptr<Operation> operation) {
         }
     } else {
         // invalid
-        // std::cout << "[-] Completed job \"" << AllOperations_to_string(operation->type()) << "\" (invalid)" << std::endl;
+        Terminal::print_pool_message(std::string("[-] Completed job: \"") + AllOperations_to_string(operation->type()) + "\" (invalid)");
     }
 }
 
@@ -173,12 +204,14 @@ void WorkerPool::stop() {
     }
 
     is_stopped = true;
-    std::cout << "[!] Shutting down..." << std::endl;
-    std::cout << "[!] Had a total of " << m_jobs.size() << " jobs" << std::endl;
+    Terminal::print_log_message("[!] Stopped worker pool");
+    Terminal::print_log_message("[!] Had a total of " + std::to_string(m_jobs.size()) + " jobs");
     for (int i = 0; i < m_assigned_jobs.size(); i++) {
         m_assigned_jobs[i] = nullptr;
         m_completed_jobs[i] = nullptr;
     }
+
+    Terminal::print_all();  // one final print.
 
     for (auto &worker : m_workers) {
         worker->should_stop = true;

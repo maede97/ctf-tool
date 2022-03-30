@@ -7,3 +7,4 @@
 #include <ctf-tool/worker.h>
 #include <ctf-tool/workerpool.h>
 #include <ctf-tool/config.h>
+#include <ctf-tool/terminal.h>
