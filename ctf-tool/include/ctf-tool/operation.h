@@ -3,6 +3,8 @@
 #include <ctf-tool/key.h>
 #include <ctf-tool/output.h>
 
+#include <memory>
+
 namespace ctf {
 
 // clang-format off
@@ -29,7 +31,7 @@ enum class OperationStatus { NotStarted, Running, Finished };
      */
 class Operation {
 public:
-    Operation(AllOperations type, const Input &input, const Key & = Key());
+    Operation(AllOperations type, const Input &input, const Key & = Key(), std::shared_ptr<Operation> previous_operation = nullptr);
     virtual ~Operation() = default;
     virtual void run() = 0;
 
@@ -43,6 +45,8 @@ public:
 
     const Output &getOutput() const;
 
+    std::shared_ptr<Operation> getPreviousOperation() const;
+
 protected:
     Input m_input;
     Key m_key;
@@ -50,5 +54,7 @@ protected:
     OperationStatus m_status = OperationStatus::NotStarted;
 
     AllOperations m_type;
+
+    std::shared_ptr<Operation> m_previous_operation;
 };
 }  // namespace ctf

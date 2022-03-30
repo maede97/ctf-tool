@@ -4,7 +4,8 @@
 #include <sstream>
 
 namespace ctf {
-OpCls_FromHex::OpCls_FromHex(const Input& input, const Key& key) : Operation(AllOperations::Op_FromHex, input, key) {}
+OpCls_FromHex::OpCls_FromHex(const Input& input, const Key& key, std::shared_ptr<Operation> previous_operation)
+    : Operation(AllOperations::Op_FromHex, input, key, previous_operation) {}
 
 void OpCls_FromHex::run() {
     // convert input from hex to ascii
@@ -23,7 +24,8 @@ void OpCls_FromHex::run() {
     m_output = Output(ss.str(), true);
 }
 
-OpCls_ToHex::OpCls_ToHex(const Input& input, const Key& key) : Operation(AllOperations::Op_ToHex, input, key) {}
+OpCls_ToHex::OpCls_ToHex(const Input& input, const Key& key, std::shared_ptr<Operation> previous_operation)
+    : Operation(AllOperations::Op_ToHex, input, key, previous_operation) {}
 
 void OpCls_ToHex::run() {
     // convert input to hex

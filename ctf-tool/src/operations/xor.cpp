@@ -1,7 +1,7 @@
 #include <ctf-tool/operations/xor.h>
 
 namespace ctf {
-OpCls_XOR::OpCls_XOR(const Input &input, const Key &key) : Operation(AllOperations::Op_XOR, input, key) {}
+OpCls_XOR::OpCls_XOR(const Input &input, const Key &key, std::shared_ptr<Operation> previous_operation) : Operation(AllOperations::Op_XOR, input, key, previous_operation) {}
 
 void OpCls_XOR::run() {
     // check if key exists

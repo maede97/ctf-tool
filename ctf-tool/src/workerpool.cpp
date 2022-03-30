@@ -7,7 +7,7 @@
 namespace ctf {
 #define CREATE_OP_SWITCH(op)     \
     case AllOperations::Op_##op: \
-        return std::make_shared<OpCls_##op>(input, m_config.get_key());
+        return std::make_shared<OpCls_##op>(input, m_config.get_key(), prev_op);
 
 std::shared_ptr<WorkerPool> WorkerPool::get_instance(const Config &config) {
     return std::shared_ptr<WorkerPool>(new WorkerPool(config));
@@ -135,7 +135,7 @@ void WorkerPool::add_operations_to_queue(std::shared_ptr<Operation> prev_op, con
     if (prev_op == nullptr) {
         int all_ops = static_cast<int>(AllOperations::Op_Count);
         for (int i = 0; i < all_ops; i++) {
-            auto op = create_operation_from_type(AllOperations(i), input);
+            auto op = create_operation_from_type(AllOperations(i), input, prev_op);
             if (op) {
                 add_job(op);
             }
@@ -151,13 +151,13 @@ void WorkerPool::add_operations_to_queue(std::shared_ptr<Operation> prev_op, con
     }
 }
 
-std::shared_ptr<Operation> WorkerPool::create_operation_from_type(AllOperations type, const Input &input) {
+std::shared_ptr<Operation> WorkerPool::create_operation_from_type(AllOperations type, const Input &input, std::shared_ptr<Operation> prev_op) {
     switch (type) { ALL_OPS(CREATE_OP_SWITCH) }
     return nullptr;
 }
 
 std::shared_ptr<Operation> WorkerPool::create_operation_from_type_if_not_disallow(AllOperations type, const Input &input, std::shared_ptr<Operation> prev_op) {
-    auto op = create_operation_from_type(type, input);
+    auto op = create_operation_from_type(type, input, prev_op);
     if (op) {
         if (op->disallow_after(prev_op->type())) {
             return nullptr;
@@ -182,6 +182,21 @@ void WorkerPool::mark_as_complete(std::shared_ptr<Operation> operation) {
     if (output.is_valid()) {
         if (m_config.get_format().matches_format(output)) {
             Terminal::print_log_message("[+] Found valid flag: \"" + m_config.get_format().match(output) + "\"", Color::Green);
+
+            // print the backtrace of the operations
+            std::vector<std::shared_ptr<Operation>> backtrace;
+            std::shared_ptr<Operation> current_op = operation;
+            while (current_op) {
+                backtrace.push_back(current_op);
+                current_op = current_op->getPreviousOperation();
+            }
+            std::reverse(backtrace.begin(), backtrace.end());
+            Terminal::print_pool_message("[+] Backtrace:", Color::Blue);
+            std::string backtrace_str = "";
+            for (auto &op : backtrace) {
+                backtrace_str += std::string(" --> ") + AllOperations_to_string(op->type());
+            }
+            Terminal::print_pool_message(backtrace_str, Color::Blue);
 
             stop();
         } else {

@@ -6,7 +6,7 @@ namespace ctf {
 
 class OpCls_FromHex : public Operation {
 public:
-    OpCls_FromHex(const Input& input, const Key& key = Key());
+    OpCls_FromHex(const Input& input, const Key& key = Key(), std::shared_ptr<Operation> previous_operation = nullptr);
     virtual ~OpCls_FromHex() {}
 
     virtual void run() override;
@@ -14,7 +14,7 @@ public:
 
 class OpCls_ToHex : public Operation {
 public:
-    OpCls_ToHex(const Input& input, const Key& key = Key());
+    OpCls_ToHex(const Input& input, const Key& key = Key(), std::shared_ptr<Operation> previous_operation = nullptr);
     virtual ~OpCls_ToHex() {}
 
     virtual void run() override;

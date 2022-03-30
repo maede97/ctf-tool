@@ -3,7 +3,8 @@
 #include <vector>
 
 namespace ctf {
-OpCls_Base64Encode::OpCls_Base64Encode(const Input& input, const Key& key) : Operation(AllOperations::Op_Base64Encode, input, key) {}
+OpCls_Base64Encode::OpCls_Base64Encode(const Input& input, const Key& key, std::shared_ptr<Operation> previous_operation)
+    : Operation(AllOperations::Op_Base64Encode, input, key, previous_operation) {}
 
 void OpCls_Base64Encode::run() {
     std::string out;
@@ -32,7 +33,8 @@ bool OpCls_Base64Encode::disallow_after(AllOperations prev_type) const {
     return prev_type == AllOperations::Op_Base64Decode;
 }
 
-OpCls_Base64Decode::OpCls_Base64Decode(const Input& input, const Key& key) : Operation(AllOperations::Op_Base64Decode, input, key) {}
+OpCls_Base64Decode::OpCls_Base64Decode(const Input& input, const Key& key, std::shared_ptr<Operation> previous_operation)
+    : Operation(AllOperations::Op_Base64Decode, input, key, previous_operation) {}
 
 void OpCls_Base64Decode::run() {
     std::string out;

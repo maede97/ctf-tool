@@ -8,7 +8,8 @@ const char *AllOperations_to_string(AllOperations op) {
     return Op_Names[static_cast<int>(op)];
 }
 
-Operation::Operation(AllOperations type, const Input &input, const Key &key) : m_type(type), m_input(input), m_key(key) {}
+Operation::Operation(AllOperations type, const Input &input, const Key &key, std::shared_ptr<Operation> previous_operation)
+    : m_type(type), m_input(input), m_key(key), m_previous_operation(previous_operation) {}
 
 OperationStatus Operation::status() const {
     return m_status;
@@ -27,6 +28,10 @@ void Operation::setCompleted() {
 
 AllOperations Operation::type() const {
     return m_type;
+}
+
+std::shared_ptr<Operation> Operation::getPreviousOperation() const {
+    return m_previous_operation;
 }
 
 const Output &Operation::getOutput() const {

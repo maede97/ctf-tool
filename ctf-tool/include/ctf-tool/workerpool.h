@@ -38,7 +38,7 @@ protected:
 
 private:
     void add_operations_to_queue(std::shared_ptr<Operation> prev_op, const Input &input);
-    std::shared_ptr<Operation> create_operation_from_type(AllOperations type, const Input &input);
+    std::shared_ptr<Operation> create_operation_from_type(AllOperations type, const Input &input, std::shared_ptr<Operation> prev_op);
     std::shared_ptr<Operation> create_operation_from_type_if_not_disallow(AllOperations type, const Input &input, std::shared_ptr<Operation> prev_op);
 
     void stop();
