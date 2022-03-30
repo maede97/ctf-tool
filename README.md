@@ -1,6 +1,12 @@
 # ctf-tool
 A C++ tool that automates CTF flag finding.
 
+## Usage
+1. Download the source code from [GitHub](https://github.com/maede97/ctf-tool) directly or with `git clone https://github.com/maede97/ctf-tool.git`.
+2. Compile the source code with `cmake ..` and `make`.
+3. Run the executable with `./CTFTool`.
+4. Edit the generated configuration file `ctf-tool.ini` in the directory above (see section below).
+
 ## Configuration
 The tool reads a file called `ctf-tool.ini` in the directory one above the binary.
 
@@ -14,5 +20,6 @@ num_workers: 4
 
 (This is a concatenation of 6 operations currently supported by the tool.)
 
+## Inspiration
 - Inspired by [katana](https://github.com/JohnHammond/katana)
 - Inspired by [cyberchef](https://github.com/gchq/CyberChef)
