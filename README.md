@@ -13,7 +13,7 @@ The tool reads a file called `ctf-tool.ini` in the directory one above the binar
 Example contents:
 ```
 key: password
-format: ctf{.*}
+format: ctf\{.*\}
 input: PRsmCTg7Px49Gz4JOTs/HT0bKkE5Kz9WPRsmCToVPx09GyIJOQU/Vj0bGAk5Oz9RPRs+CToFP1U9GzoJOQUrHj0bJkE6Oz9WPgs2CTkrP1U9GxAJODs/VD4LIgk5FSscPRsmCTo7Px49GzYJOSsrVT0bKkE5Oz8ePRsyCToVK1Q=
 num_workers: 4
 ```

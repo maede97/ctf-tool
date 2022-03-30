@@ -22,6 +22,7 @@ bool Operation::disallow_after(AllOperations type_prev) const {
 void Operation::setAssigned() {
     m_status = OperationStatus::Running;
 }
+
 void Operation::setCompleted() {
     m_status = OperationStatus::Finished;
 }
